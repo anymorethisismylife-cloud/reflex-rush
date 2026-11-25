@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reflex Rush — Agent ID Arcade</title>
+<meta name="description" content="Reflex Rush: a reaction-time arcade game. Ranked play is gated to Agent ID holders and recorded on-chain.">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">&#9889;</span>
+    <div>
+      <h1>Reflex Rush</h1>
+      <p class="tagline">Agent ID arcade &middot; reaction-time game</p>
+    </div>
+  </div>
+  <div class="wallet-box">
+    <span id="networkBadge" class="badge">Not connected</span>
+    <button id="connectBtn" class="btn primary">Connect wallet</button>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="panel" id="statusPanel">
+    <h2>Your status</h2>
+    <div id="accountInfo" class="muted">Connect your wallet to begin.</div>
+    <div id="agentIdStatus" class="agent-status"></div>
+    <div id="noAgentPanel" class="notice hidden">
+      <strong>You need an Agent ID to play ranked.</strong>
+      <p>Agent ID is a non-transferable identity token claimed only inside the
+      Binance App: open your Wallet, tap the Agent ID banner, and claim your
+      <code>.ai</code> name. This site never asks for your seed phrase or private key.</p>
+      <p>You can still try the game in <strong>Practice Mode</strong> below &mdash; it runs
+      fully off-chain and nothing is submitted.</p>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="stat-label">Personal best</span><span id="personalBest" class="stat-value">&mdash;</span></div>
+      <div class="stat"><span class="stat-label">Total plays</span><span id="totalPlays" class="stat-value">&mdash;</span></div>
+    </div>
+    <div class="field-row">
+      <label for="networkSelect">Network</label>
+      <select id="networkSelect">
+        <option value="bsc">BSC Mainnet</option>
+        <option value="anvil">Local Anvil</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <label for="contractAddressInput">Game contract address</label>
+      <input id="contractAddressInput" type="text" spellcheck="false"
+             placeholder="0x&hellip; (paste after deploy)" autocomplete="off">
+      <button id="saveAddressBtn" class="btn small">Save</button>
+    </div>
+    <p id="addressHint" class="hint">No contract address set for this network yet.</p>
+  </section>
+
+  <section class="panel game-panel">
+    <h2>Reflex Rush</h2>
+    <p class="muted">5 rounds. Wait for the target to turn <strong class="green-text">green</strong>,
+    then click it as fast as you can. Each round scores up to 1,000 points;
+    your total is the sum &times; 2 (max 10,000).</p>
+
+    <div id="gameArea" class="game-area idle" role="button" tabindex="0" aria-label="Game target">
+      <div id="gameMessage">Press Start to play</div>
+      <div id="gameSub" class="game-sub"></div>
+    </div>
+
+    <div class="rounds" id="roundResults"></div>
+    <div class="score-line">Total score: <strong id="totalScore">0</strong></div>
+    <div id="sessionInfo" class="muted small"></div>
+    <div id="submitWarning" class="notice warn hidden"></div>
+
+    <div class="actions">
+      <button id="startRankedBtn" class="btn primary" disabled>Start ranked game</button>
+      <button id="startPracticeBtn" class="btn">Practice mode</button>
+      <button id="submitScoreBtn" class="btn success hidden">Submit score on-chain</button>
+    </div>
+    <p class="hint">Ranked play sends two transactions you confirm in your wallet:
+    one to start the session, one to submit your score. There is no entry fee.</p>
+    <div id="txStatus" class="tx-status" aria-live="polite"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Leaderboard</h2>
+    <p class="muted small">Top players by best on-chain score.</p>
+    <ol id="leaderboard" class="leaderboard">
+      <li class="muted">Connect and set a contract address to load the leaderboard.</li>
+    </ol>
+    <button id="refreshLbBtn" class="btn small">Refresh</button>
+  </section>
+</main>
+
+<footer>
+  <p>Reflex Rush is an arcade game for Agent ID holders. Ranked scores are recorded
+  on-chain on BNB Chain. No entry fee, no prize pool, no token. Every on-chain action
+  is a transaction you explicitly confirm in your own wallet.</p>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
